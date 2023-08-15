@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+project_dir="./sites/e-learning-module"
+file_path="./sites/e-learning-module/routes"
+the_file_name="web.php"
+file_dir="$(dirname "$file_path")"
+
+
+inotifywait   --recursive --monitor --event modify --format "%w%f" "$file_dir" | 
+   while  read -r file_name; do
+       if [ $file_name = "$file_path/$the_file_name" ]; then
+          cd "$project_dir"
+          php artisan optimize
+          cd ~
+      fi
+   done
